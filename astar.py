@@ -8,7 +8,7 @@ def get_f(cost, position, goal):
 	return cost[position]+get_h(position, goal)
 
 def get_h(position, goal):
-	return ((position-goal)**2).sum()
+	return ((np.array(position)-np.arra(goal)**2).sum()
 
 def get_next(cost, open_list, goal):
 	fs = [get_f(cost, i, goal) for i in open_list]
