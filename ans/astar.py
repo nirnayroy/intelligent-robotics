@@ -16,12 +16,13 @@ def get_next(cost, open_list, goal):
 	return next_pos
 
 def get_neighbours(position, size):
-	neighbours = []
-	if abs(position[0])==size:
-		
-	elif abs(position[1])==size:
-
-	return neighbours
+	(x, y)  = position
+	surrounding_cells = [(x, y-1), (x+1, y-1), (x+1, y),
+	(x+1, y+1), (x, y+1), (x-1, y+1), (x-1, y), (x-1,y-1)]
+	for (i, j) in surrounding_cells:
+		if abs(i)>size or abs(j)>size:
+			surrounding_cells.pop((i,j))
+	return surrounding_cells
 
 def astar(start, goal, cost):
 	open_list = [start]
@@ -43,7 +44,7 @@ def astar(start, goal, cost):
 		closed_list.append(q)
 	return closed_list
 
-def 
+
 
 
 
