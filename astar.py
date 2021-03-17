@@ -1,7 +1,7 @@
 import numpy as np
 
 def give_cost_matrix(size):
-	cost = np.zeros(size)
+	cost = np.zeros((size, size))
 	return cost
 
 def get_f(cost, position, goal):
