@@ -47,7 +47,7 @@ def astar(start, goal, cost):
 	return closed_list
 
 if __name__=="__main__":
-	cost = get_cost(10)
+	cost = give_cost_matrix(10)
 	start = (1, 3)
 	goal = (7, 8)
 	path = astar(start, goal, cost)
