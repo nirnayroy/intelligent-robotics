@@ -20,7 +20,9 @@ def get_neighbours(position, size):
 	surrounding_cells = [(x, y-1), (x+1, y-1), (x+1, y),
 	(x+1, y+1), (x, y+1), (x-1, y+1), (x-1, y), (x-1,y-1)]
 	for (i, j) in surrounding_cells:
-		if abs(i)>size or abs(j)>size:
+		if i>size or j>size:
+			surrounding_cells.pop((i,j))
+		elif i<0 or j <0:
 			surrounding_cells.pop((i,j))
 	return surrounding_cells
 
@@ -44,7 +46,12 @@ def astar(start, goal, cost):
 		closed_list.append(q)
 	return closed_list
 
-
+if __name__=="__main__":
+	cost = get_cost(10)
+	start = (1, 3)
+	goal = (7, 8)
+	path = astar(start, goal, cost)
+	print(path)
 
 
 
