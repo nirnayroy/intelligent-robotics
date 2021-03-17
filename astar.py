@@ -21,9 +21,9 @@ def get_neighbours(position, size):
 	(x+1, y+1), (x, y+1), (x-1, y+1), (x-1, y), (x-1,y-1)]
 	for (i, j) in surrounding_cells:
 		if i>size or j>size:
-			surrounding_cells.pop((i,j))
+			surrounding_cells.remove((i,j))
 		elif i<0 or j <0:
-			surrounding_cells.pop((i,j))
+			surrounding_cells.remove((i,j))
 	return surrounding_cells
 
 def astar(start, goal, cost):
@@ -31,7 +31,7 @@ def astar(start, goal, cost):
 	closed_list = []
 	while len(open_list) != 0:
 		q= get_next(cost, open_list, goal)
-		open_list.pop(q)
+		open_list.remove(q)
 		neighbours = get_neighbours(q)
 		for j in neighbours:
 			if j==goal:
