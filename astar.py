@@ -1,4 +1,5 @@
 import numpy as np
+from matplotlib import pyplot as plt
 
 def give_cost_matrix(size):
 	cost = np.zeros((size, size))
@@ -17,40 +18,47 @@ def get_next(cost, open_list, goal):
 
 def get_neighbours(position, size):
 	(x, y)  = position
-	surrounding_cells = [(x, y-1), (x+1, y-1), (x+1, y),
+	neighbours = [(x, y-1), (x+1, y-1), (x+1, y),
 	(x+1, y+1), (x, y+1), (x-1, y+1), (x-1, y), (x-1,y-1)]
-	for (i, j) in surrounding_cells:
+	for (i, j) in neighbours:
 		if i>size or j>size:
-			surrounding_cells.remove((i,j))
+			neighbours.remove((i,j))
 		elif i<0 or j <0:
-			surrounding_cells.remove((i,j))
-	return surrounding_cells
+			neighbours.remove((i,j))
+	return neighbours
 
-def astar(start, goal, cost):
+def astar(start, goal, cost, size):
 	open_list = [start]
 	closed_list = []
 	while len(open_list) != 0:
 		q= get_next(cost, open_list, goal)
-		open_list.remove(q)
-		neighbours = get_neighbours(q)
+		#print(q)
+		neighbours = get_neighbours(q, size)
+		closed_list.append(q)
 		for j in neighbours:
 			if j==goal:
 				open_list=[]
-				break
+				closed_list.append(j)
+				return closed_list
 			elif get_f(cost, j, goal)>min([get_f(cost, i, goal) for i in open_list]):
-				pass
-			elif get_f(cost, j, goal)>min([get_f(cost, i, goal) for i in closed_list]):
-				pass
+				continue
+			if get_f(cost, j, goal)>min([get_f(cost, i, goal) for i in closed_list]):
+				continue
 			else:
 				open_list.append(j)
-		closed_list.append(q)
-	return closed_list
+		#(open_list, q)
+		open_list.remove(q)
+
+
+
+	
 
 if __name__=="__main__":
-	cost = give_cost_matrix(10)
+	size = 100
+	cost = give_cost_matrix(size)
 	start = (1, 3)
-	goal = (7, 8)
-	path = astar(start, goal, cost)
+	goal = (93, 72)
+	path = astar(start, goal, cost, size)
 	print(path)
 
 
