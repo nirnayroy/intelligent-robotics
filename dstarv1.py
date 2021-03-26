@@ -1,8 +1,8 @@
-
 import math
 from sys import maxsize
+import matplotlib.pyplot as plt
 
-
+show_animation = True
 class State(object):
 
     def __init__(self, x, y):
@@ -10,7 +10,7 @@ class State(object):
         self.y = y
         self.parent = None
         self.state = "."
-        self.t = "new"
+        self.t = "new" #tag for state
         self.h = 0
         self.k = 0
 
@@ -41,13 +41,6 @@ class Map(object):
                 tmp.append(State(i, j))
             map_list.append(tmp)
         return map_list
-
-    def print_map(self):
-        for i in range(self.row):
-            tmp = ""
-            for j in range(self.col):
-                tmp += self.map[i][j].state + " "
-            print(tmp)
 
     def get_neighbers(self, state):
         state_list = []
@@ -139,6 +132,8 @@ class Dstar(object):
             self.insert(x, x.parent.h + x.cost(x.parent))
 
     def run(self, start, end):
+        rx = []
+        ry = []
         self.open_list.add(end)
         while True:
             self.process_state()
@@ -146,22 +141,23 @@ class Dstar(object):
                 break
         start.set_state("s")
         s = start
-        while s != end:
-            s.set_state("s")
-            s = s.parent
+        s = s.parent
         s.set_state("e")
-        self.map.print_map()
         tmp = start
-        self.map.set_obstacle([(9, 3), (9, 4), (9, 5), (9, 6), (9, 7), (9, 8)])
         while tmp != end:
             tmp.set_state("*")
-            self.map.print_map()
+            rx.append(tmp.x)
+            ry.append(tmp.y)
+            if show_animation:
+                plt.plot(rx, ry)
+                plt.pause(0.01)
             print("")
             if tmp.parent.state == "#":
                 self.modify(tmp)
                 continue
             tmp = tmp.parent
         tmp.set_state("e")
+        return rx, ry
 
     def modify(self, state):
         self.modify_cost(state)
@@ -169,14 +165,24 @@ class Dstar(object):
             k_min = self.process_state()
             if k_min >= state.h:
                 break
-
+def main():
+    m = Map(20, 20)
+    obstacle_list = [(8, 3), (8, 4), (8, 5), (8, 6), (8, 7), (8, 8), (8, 9), (8, 10), (8, 11), (8, 12),(8, 13), (7, 13), (6, 13), (5, 13)]
+    m.set_obstacle(obstacle_list)
+    start = [1,2]
+    goal = [17, 19]
+    if show_animation:
+        plt.plot([x for (x, y) in obstacle_list], [y for (x, y) in obstacle_list], ".k")
+        plt.plot(start[0], start[1], "og")
+        plt.plot(goal[0], goal[1], "xb")
+    start = m.map[start[0]][start[1]]
+    end = m.map[goal[0]][goal[1]]
+    dstar = Dstar(m)
+    rx, ry = dstar.run(start, end)
+    if show_animation:
+        plt.plot(rx, ry)
+        plt.show()
 
 if __name__ == '__main__':
-    m = Map(20, 20)
-    m.print_map()
-    m.set_obstacle([(4, 3), (4, 4), (4, 5), (4, 6), (5, 3), (6, 3), (7, 3)])
-    start = m.map[1][2]
-    end = m.map[17][11]
-    dstar = Dstar(m)
-    dstar.run(start, end)
-    #m.print_map()
+    main()
+
